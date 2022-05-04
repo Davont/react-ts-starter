@@ -1,6 +1,6 @@
-# 项目名称
+# react-ts-starter
 
-在这里添加项目的概述。
+React + Typescript + Webpack 脚手架
 
 ---
 
@@ -11,15 +11,17 @@
 通过 NPM 安装：
 
 ```sh
-npm install boilerplate-2021
+npm install react-ts-starter --save
+```
 ```
 
 或通过 Yarn 安装：
 
 ```sh
-yarn add boilerplate-2021
+yarn add react-ts-starter
+```
 ```
 
 ## 如何在本地开发
 
-在这里告诉开发人员如何在本地安装和开发。
+...
