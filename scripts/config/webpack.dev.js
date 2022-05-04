@@ -11,7 +11,7 @@ module.exports = merge(common, {
     client: { // 日志等级
       logging: 'error',
       progress: true,
-      overlay: true
+      overlay: false
     }, 
     compress: true, // 是否启用 gzip 压缩
     open: true, // 打开默认浏览器

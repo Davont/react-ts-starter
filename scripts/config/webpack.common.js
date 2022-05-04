@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin')
 const { resolve } = require('path');
 const { isDev, PROJECT_PATH } = require('../constant');
 
@@ -40,28 +41,16 @@ module.exports = {
       },
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10 * 1024,
-              name: '[name].[contenthash:8].[ext]',
-              outputPath: 'assets/images',
-            },
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 4 * 1024,
           },
-        ],
+        },
       },
       {
-        test: /\.(ttf|woff|woff2|eot|otf)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              name: '[name].[contenthash:8].[ext]',
-              outputPath: 'assets/fonts',
-            },
-          },
-        ],
+        test: /\.(eot|svg|ttf|woff|woff2?)$/,
+        type: 'asset/resource',
       },
     ],
   },
@@ -95,6 +84,20 @@ module.exports = {
             minifyURLs: true,
             useShortDoctype: true,
           },
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: resolve(PROJECT_PATH, './public'),
+          to: resolve(PROJECT_PATH, './dist'),
+          toType: 'dir',
+          globOptions: {
+            dot: true,
+            gitignore: true,
+            ignore: ['**/index.html'],
+          },
+        },
+      ],
     }),
   ],
 };
