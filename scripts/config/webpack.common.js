@@ -1,14 +1,30 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const WebpackBar = require('webpackbar');
 const { resolve } = require('path');
-const { isDev, PROJECT_PATH } = require('../constant');
+const { PROJECT_PATH } = require('../conf');
+const { isDevelopment, isProduction } = require('../env');
+
+const getCssLoaders = (importLoaders) => [
+  isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+  {
+    loader: 'css-loader',
+    options: {
+      modules: false,
+      sourceMap: isDevelopment,
+      importLoaders,
+    },
+  },
+
+];
 
 module.exports = {
   entry: {
     app: resolve(PROJECT_PATH, './src/index.tsx'),
   },
   output: {
-    filename: `js/[name]${isDev ? '' : '.[hash:8]'}.js`,
+    filename: `js/[name]${isDevelopment ? '' : '.[hash:8]'}.js`,
     path: resolve(PROJECT_PATH, './dist'),
   },
   module: {
@@ -22,19 +38,11 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: false,
-              sourceMap: isDev,
-              importLoaders: 1, // 需要先被 less-loader 处理，所以这里设置为 1
-            },
-          },
+          ...getCssLoaders(1),
           {
             loader: 'less-loader',
             options: {
-              sourceMap: isDev,
+              sourceMap: isDevelopment,
             },
           },
         ],
@@ -68,7 +76,7 @@ module.exports = {
       template: resolve(PROJECT_PATH, './public/index.html'),
       filename: 'index.html',
       cache: false, // 特别重要：防止之后使用v6版本 copy-webpack-plugin 时代码修改一刷新页面为空问题。
-      minify: isDev
+      minify: isDevelopment
         ? false
         : {
             removeAttributeQuotes: true,
@@ -99,5 +107,15 @@ module.exports = {
         },
       ],
     }),
+    new WebpackBar({
+      name: isDevelopment ? 'RUNNING' : 'BUNDLING',
+      color: isDevelopment ? '#52c41a' : '#722ed1',
+    }),
   ],
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename],
+    },
+  }
 };

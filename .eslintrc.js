@@ -6,7 +6,6 @@ module.exports = {
     'airbnb-typescript',
     'airbnb/hooks',
     'plugin:import/recommended',
-    'plugin:unicorn/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/jsx-runtime',
@@ -28,6 +27,9 @@ module.exports = {
     },
   },
   rules: {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".tsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".tsx"] }],
+    'import/no-import-module-exports':'off',
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
   },
 };
